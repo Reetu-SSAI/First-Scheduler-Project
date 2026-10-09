@@ -10,7 +10,7 @@ managers. Bugs in the server (the API) are in [api-bugs.md](api-bugs.md), which 
 | ID                                                                                           | Title                                                               | Screen            | Severity | Priority | Status | Automated tests                            |
 | -------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- | ----------------- | -------- | -------- | ------ | ------------------------------------------ |
 | [BUG-UI-001](#bug-ui-001-admins-a-new-admin-is-not-shown-until-the-page-is-reloaded)         | Admins: a new admin is not shown until the page is reloaded         | Settings → Admins | Medium   | P2       | Open   | `tests/ui/add-admin-journey.spec.js` TC-02 |
-| [BUG-UI-002](#bug-ui-002-schedule-the-biweekly-label-shows-only-the-dates-of-the-first-week) | Schedule: the Biweekly label shows only the dates of the first week | Schedule          | Low      | P3       | Open   | `tests/ui/schedule.spec.js` TC-07          |
+| [BUG-UI-002](#bug-ui-002-schedule-the-biweekly-label-shows-only-the-dates-of-the-first-week) | Schedule: the Biweekly label shows only the dates of the first week | Schedule          | Low      | P3       | Fixed  | `tests/ui/schedule.spec.js` TC-07          |
 
 **Severity** (how bad it is for the business): **High** = wrong data is saved or shown, or a feature
 does not work · **Medium** = something works wrong, but there is a way around it · **Low** = a small
@@ -76,7 +76,7 @@ is fixed. Then QA removes `@knownbug` and `(BUG-UI-001)` from it.
 | **Screen**          | Schedule                          |
 | **Severity**        | Low                               |
 | **Priority**        | P3                                |
-| **Status**          | Open                              |
+| **Status**          | Fixed (checked on 2026-10-09)     |
 | **Found on**        | 2026-10-09 (staging, station PSD) |
 | **Browser**         | Chrome                            |
 | **Automated tests** | `tests/ui/schedule.spec.js` TC-07 |

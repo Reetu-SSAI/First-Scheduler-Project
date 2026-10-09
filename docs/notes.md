@@ -57,7 +57,8 @@ Things that are skipped for now, open questions, and things to remember. Not bug
   Route Count button, Filter, Sort, the Add Driver button, Auto schedule, All Schedule, Add new
   schedule. These add or change data that drivers can see. Needs your OK and the app flow.
 - **Bug:** the Biweekly label shows only the dates of the first week → logged as
-  [BUG-UI-002](known-bugs/ui-bugs.md) (confirmed by you on 2026-10-09).
+  [BUG-UI-002](known-bugs/ui-bugs.md) (confirmed by you on 2026-10-09). Fixed by the developers the
+  same day: the label now shows "W:41/42 Oct 04 - Oct 17", and TC-07 is a normal test again.
 - **Noticed:** in Biweekly, the next-week arrow moves 1 week (W:41/42 → W:42/43), not 2. Ask if this is
   on purpose.
 - **Noticed:** a search with no match shows an empty list without a message like "No drivers found".

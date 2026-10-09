@@ -147,8 +147,8 @@ test(
 );
 
 test(
-  'TC-07: Verify that the Biweekly label shows the dates of both weeks (BUG-UI-002)',
-  { tag: ['@regression', '@knownbug'] },
+  'TC-07: Verify that the Biweekly label shows the dates of both weeks',
+  { tag: ['@regression'] },
   async ({ page }) => {
     // Log in; the Schedule open right after login (every UI test starts logged out)
     const loginPage = new LoginPage(page);
@@ -171,7 +171,7 @@ test(
 
     await schedulePage.biweeklyButton.click();
     await expect(schedulePage.dayHeaders).toHaveCount(14);
-    // e.g. "W:41/42 Oct 04 - Oct 17" (the bug: "W:41/42 Oct 04 - Oct 10")
+    // e.g. "W:41/42 Oct 04 - Oct 17" (BUG-UI-002, fixed: "W:41/42 Oct 04 - Oct 10")
     await expect(schedulePage.weekLabel).toContainText(
       firstDay + ' - ' + lastDay,
     );

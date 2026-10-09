@@ -64,10 +64,9 @@ To run only part of the tests:
   `npx playwright test tests/ui/add-admin-journey.spec.js --headed`
 - In VS Code: click the green ▶ next to a test (needs the Playwright extension).
 
-> **Right now 2 tests fail on purpose.** They show open bugs (see [Known bugs](#known-bugs)). Any
-> **other** failure is new and needs a look. Run `npm run test:knownbug` to see only these:
+> **Right now 1 test fails on purpose.** It shows an open bug (see [Known bugs](#known-bugs)). Any
+> **other** failure is new and needs a look. Run `npm run test:knownbug` to see only this one:
 >
-> - **schedule:** schedule TC-07 (BUG-UI-002). `npm test` runs it.
 > - **admins:** add admin journey TC-02 (BUG-UI-001). It is also `@adds-data`, so `npm test` skips
 >   it.
 
@@ -80,9 +79,9 @@ the same time with `npx playwright test --workers=2` (see [docs/notes.md](docs/n
 The terminal shows ✓ (passed) or ✘ (failed) for each test, then the error of each failed test:
 
 ```
-✘ TC-07: Verify that the Biweekly label shows the dates of both weeks (BUG-UI-002) @regression @knownbug
-    Expected substring: "Oct 04 - Oct 17"
-    Received string:    "W:41/42 Oct 04 - Oct 10"
+✘ TC-02: Verify that a new admin shows in the list without reloading the page (BUG-UI-001) @regression @adds-data @knownbug
+    Expected: visible
+    Error: element(s) not found
 ```
 
 **Expected** is what the test wanted. **Received** is what the app really showed.
@@ -322,8 +321,8 @@ A known-bug test has the bug ID at the end of its title and the `@knownbug` tag:
 
 ```js
 test(
-  'TC-07: Verify that the Biweekly label shows the dates of both weeks (BUG-UI-002)',
-  { tag: ['@regression', '@knownbug'] },
+  'TC-02: Verify that a new admin shows in the list without reloading the page (BUG-UI-001)',
+  { tag: ['@regression', '@adds-data', '@knownbug'] },
   async ({ page }) => {
 ```
 
@@ -337,7 +336,7 @@ test(
 3. Write a test for the correct behaviour. Add `@knownbug` to its tags and the bug ID to its title.
 
 **A bug was fixed?** Run `npm run test:knownbug`, or only the bug's tests, for example
-`npx playwright test --grep "BUG-UI-002"`. For each test that now passes, remove `@knownbug` and the
+`npx playwright test --grep "BUG-UI-001"`. For each test that now passes, remove `@knownbug` and the
 bug ID from it. Then set the bug's **Status** to Fixed in the docs.
 
 Open bugs: [API bugs](docs/known-bugs/api-bugs.md) · [UI bugs](docs/known-bugs/ui-bugs.md)
