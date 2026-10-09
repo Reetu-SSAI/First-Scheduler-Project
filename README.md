@@ -109,6 +109,8 @@ tests/api/            API tests, one folder per area (none yet: the Scheduler AP
 tests/ui/             UI tests, one file per screen:
                       login                     Login
                       schedule                  Schedule
+                      roster-upload             Schedule → Other Options → Import Amazon Weekly
+                                                Roster (bulk upload)
                       sms-chat, inapp-chat      Chats → SMS Chat, In-App Chat
                       leave-management, restricted-dates, vto-management
                                                 Time Off Request → its 3 tabs

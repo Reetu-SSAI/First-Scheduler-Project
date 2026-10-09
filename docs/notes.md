@@ -58,6 +58,15 @@ Things that are skipped for now, open questions, and things to remember. Not bug
 - **Not tested yet:** adding, moving or deleting shifts, Copy, Mark Extras, Publish, the Route Count
   button, applying a filter or sort, saving a new driver, Auto schedule, All Schedule, Add new
   schedule. These add or change data that drivers can see. Needs your OK and the app flow.
+- **Bulk upload (Import Amazon Weekly Roster):** `tests/ui/roster-upload.spec.js` checks, read only, that
+  Other Options opens the page `/schedule/roster-upload`, the upload box, Choose File (Excel only:
+  .xls, .xlsx, several files allowed), the 11 steps and the week arrows. `schedule.spec.js` TC-13 opens
+  Other Options → Bulk Actions and checks its 7 actions without clicking one.
+- **Bulk upload, not tested yet:** choosing and importing a roster file (it adds the roster to the
+  schedule of station PSD), a wrong file (e.g. .csv, .pdf, an empty or broken Excel file), the
+  mismatch review (steps 8–11), and the 7 Bulk Actions (Delete All Shifts, Delete Empty Shifts, Send
+  Schedule Details, Driver Reliability Rating, Set Availability, Driver Classification, Edit Shift).
+  Needs your OK, a sample Amazon roster file for `test-files/`, and a week without real shifts.
 - **Bug:** the Biweekly label shows only the dates of the first week → logged as
   [BUG-UI-002](known-bugs/ui-bugs.md) (confirmed by you on 2026-10-09). Fixed by the developers the
   same day: the label now shows "W:41/42 Oct 04 - Oct 17", and TC-07 is a normal test again.

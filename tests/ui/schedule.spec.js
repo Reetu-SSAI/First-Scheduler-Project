@@ -319,3 +319,36 @@ test(
     await expect(schedulePage.addDriverWindow).toBeHidden();
   },
 );
+
+test(
+  'TC-13: Verify that Other Options -> Bulk Actions lists the 7 bulk actions',
+  { tag: ['@regression'] },
+  async ({ page }) => {
+    // Log in; the Schedule opens right after login (every UI test starts logged out)
+    const loginPage = new LoginPage(page);
+    await loginPage.open();
+    await loginPage.login(process.env.LOGIN_EMAIL, process.env.LOGIN_PASSWORD);
+    await expect(page).toHaveURL(/lmdmax\.com\/schedule/, { timeout: 30000 });
+
+    const schedulePage = new SchedulePage(page);
+    await expect(schedulePage.weekLabel).toBeVisible({ timeout: 30000 });
+
+    await schedulePage.otherOptionsButton.click();
+    // Opens the list only; none of the actions is clicked (the list has Delete All Shifts)
+    await page.getByRole('button', { name: 'Bulk Actions' }).click();
+
+    for (const name of [
+      'Delete All Shifts',
+      'Delete Empty Shifts',
+      'Send Schedule Details',
+      'Bulk Action: Driver Reliability Rating',
+      'Bulk Action: Set Availability',
+      'Bulk Action: Driver Classification',
+      'Bulk Action: Edit Shift',
+    ]) {
+      await expect(page.getByText(name, { exact: true })).toBeVisible();
+    }
+    // Closed without choosing
+    await page.keyboard.press('Escape');
+  },
+);
