@@ -40,7 +40,8 @@ Things that are skipped for now, open questions, and things to remember. Not bug
   - Ticking/unticking a metric or export field, or picking another time format / week day / landing
     page → Save becomes enabled (no Save clicked).
   - Manage Driver Performance Metrics: "Select any five options" → what happens with a 6th tick?
-  - Role Creation & Assignment: + Create Role, Edit and Delete of a role.
+  - Role Creation & Assignment: saving a new role, Edit and Delete of a role (the "Create Role"
+    window is only opened and cancelled).
 - **Why skipped:** same as 1b, these are settings of the whole station. Needs your OK.
 - **Noticed:** while Export Settings is still loading, the page shows only an enabled Save button; when
   the fields arrive, Save becomes disabled. Ask if Save should be disabled while loading.
@@ -51,10 +52,11 @@ Things that are skipped for now, open questions, and things to remember. Not bug
 ### 1d. Schedule screen
 
 - **Tested (read only):** week shown with 7 days, the shift counts, next/previous week, Daily / Weekly /
-  Biweekly, search by driver name, the view list. None of these send a save to the server (checked on
-  2026-10-09).
-- **Not tested yet:** adding, moving or deleting shifts, Copy, Mark Extras, Publish, Other Options, the
-  Route Count button, Filter, Sort, the Add Driver button, Auto schedule, All Schedule, Add new
+  Biweekly, search by driver name, the view list. Opened and closed without choosing anything: Filter,
+  Sort, Other Options, the station menu, the "Add Driver" window (Cancel). None of these send a save to
+  the server (checked on 2026-10-09).
+- **Not tested yet:** adding, moving or deleting shifts, Copy, Mark Extras, Publish, the Route Count
+  button, applying a filter or sort, saving a new driver, Auto schedule, All Schedule, Add new
   schedule. These add or change data that drivers can see. Needs your OK and the app flow.
 - **Bug:** the Biweekly label shows only the dates of the first week → logged as
   [BUG-UI-002](known-bugs/ui-bugs.md) (confirmed by you on 2026-10-09). Fixed by the developers the
@@ -66,22 +68,25 @@ Things that are skipped for now, open questions, and things to remember. Not bug
 ### 1e. Chats (SMS Chat and In-App Chat)
 
 - **Tested (read only):** the pages open, the Chats menu, search, "No chats found", the Filters panel
-  (closed without applying), the In-App Chat tabs and the Individual Chat tabs. None of these send a
-  save to the server (checked on 2026-10-09).
-- **Not tested yet:** opening a conversation (it may mark messages as read), sending a message,
-  Broadcast Message, Start New Group, Create Groups and Broadcasts, Apply Filters. SMS go to real
-  phones. Needs your OK, and test drivers whose phones reach no real person.
+  (closed without applying), the In-App Chat tabs and the Individual Chat tabs. Opened and closed
+  without choosing anything: Broadcast Message, Start New Group, Create Groups and Broadcasts. None of
+  these send a save to the server (checked on 2026-10-09).
+- **Not tested yet:** opening a conversation (it may mark messages as read), sending a message or a
+  broadcast, creating a group, Apply Filters. SMS go to real phones. Needs your OK, and test drivers
+  whose phones reach no real person.
 - **Noticed:** the SMS chat list shows the welcome message with the driver's login email (the password
   is hidden with ###). Ask if showing the email there is on purpose.
 
 ### 1f. Time Off Request (Leave Management, Restricted Dates, VTO Management)
 
 - **Tested (read only):** the 4 status cards and their lists, the Approved number matches the requests
-  listed, the 4 sort orders, search, the 3 tabs, the Restricted Dates list, the VTO screen. None of
-  these send a save to the server (checked on 2026-10-09).
-- **Not tested yet:** + Time Off Request, Approve, Decline, Move To Declined, + Add Restricted Dates and
-  its Edit/Delete, + Add New VTO, Select Date. They change the drivers' time off or offer VTO to real
-  drivers. Needs your OK and the app flow.
+  listed, the 4 sort orders, search, the 3 tabs, the Restricted Dates list, the VTO screen. Opened and
+  closed without filling anything: the "Time Off Request", "Date Restriction" and "Add VTO" windows
+  (Cancel), and the Select Date calendar. None of these send a save to the server (checked on
+  2026-10-09).
+- **Not tested yet:** submitting a Time Off Request, Approve, Decline, Move To Declined, adding a
+  restricted date and its Edit/Delete, adding a VTO. They change the drivers' time off or offer VTO to
+  real drivers. Needs your OK and the app flow.
 - **Data on staging:** Restricted Dates already has many "QA Restricted ..." entries from earlier test
   runs (Sep 17, 2026), and one named just "134".
 
@@ -117,7 +122,11 @@ Things that are skipped for now, open questions, and things to remember. Not bug
 - `docs/known-bugs/api-bugs.md` will be written in the full LMDmax format when the API tests come.
 - CI: `.github/workflows/tests.yml` did not set `TEST_STATION_ID`, so `global-setup.js` could not
   select the station on GitHub. Added `TEST_STATION_ID: '645'` like the LMDmax workflow (2026-10-09).
-  The repo secrets `LOGIN_EMAIL` and `LOGIN_PASSWORD` are still needed on GitHub.
+  The repo secrets `LOGIN_EMAIL` and `LOGIN_PASSWORD` were added on GitHub on 2026-10-09.
+- CI changes on 2026-10-09 (not in LMDmax): the `@knownbug` tests are skipped unless you choose
+  `knownbug` in Run workflow, and on CI the tests run one at a time (staging is too slow with more).
+  The repo is at <https://github.com/Reetu-SSAI/First-Scheduler-Project>. It is **public**: make it
+  private, because the reports can contain the test login.
 
 ## Never clicked by the tests
 
@@ -145,7 +154,8 @@ Things that are skipped for now, open questions, and things to remember. Not bug
 - Staging is sometimes slow. Then, in a full run with 4 tests at the same time, some screens (Schedule,
   Role Creation & Assignment, Export Settings, Restricted Dates) are still empty after 15 seconds and
   about 7 tests fail. Run again, or run fewer at a time: `npx playwright test --workers=2` (about 8
-  minutes). On 2026-10-09 one run failed this way and the next run passed.
+  minutes). On 2026-10-09 one run failed this way and the next run passed. On GitHub it happened too,
+  so CI now runs one test at a time.
 
 - The old password on Change Password is checked by the server while typing
   (`/lmd/usrsrv/users/v1/confirm_password`). New Password opens only when the old password is right.
