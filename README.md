@@ -395,7 +395,8 @@ tests.
 
 - CI skips the known-bug tests, so a red run means a **new** failure. To run them on GitHub, choose
   `knownbug` in **Run workflow**. The daily `@regression` run also runs the `@adds-data` tests, so it adds 2 admins to station PSD every day.
-- On CI a failed test is run one more time before it counts as failed.
+- On CI a failed test is run one more time before it counts as failed, and the tests run one at a
+  time, because staging gets too slow with more.
 - CI reports have the same traces and API calls as on your computer. A trace can contain the
   test user's token or password, so **keep the repo private**: anyone with access to the repo can
   download the reports.

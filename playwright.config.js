@@ -18,6 +18,7 @@ module.exports = defineConfig({
   globalSetup: './global-setup.js', // before the run: clears old Allure results, logs in once, selects the station
   fullyParallel: true, // run tests at the same time, also the tests inside one file
   retries: process.env.CI ? 1 : 0, // on CI, run a failed test one more time
+  workers: process.env.CI ? 1 : undefined, // on CI, one test at a time: staging gets too slow with more
   reporter: [
     ['list'], // progress in the terminal
     ['html', { open: 'never' }], // Playwright report -> npm run report
