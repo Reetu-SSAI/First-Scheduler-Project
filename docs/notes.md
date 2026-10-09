@@ -67,6 +67,19 @@ Things that are skipped for now, open questions, and things to remember. Not bug
   mismatch review (steps 8–11), and the 7 Bulk Actions (Delete All Shifts, Delete Empty Shifts, Send
   Schedule Details, Driver Reliability Rating, Set Availability, Driver Classification, Edit Shift).
   Needs your OK, a sample Amazon roster file for `test-files/`, and a week without real shifts.
+- **Other Options (read only):** TC-14 to TC-17 open Save Schedule Template, Load Schedule Template,
+  Schedule Settings and Export Backup Shifts and close them with Cancel/Close (no save request, checked
+  on 2026-10-09).
+- **Possible bug:** in the Weekly view, the "Save Schedule Template" window says "W41/42 : Oct 04 -
+  Oct 10" (two week numbers for one week; expected "W41"). Ask you before logging it.
+- **Create shift and drag & drop (asked for on 2026-10-09, not done yet):** a shift is created with the
+  "+" that shows when you hover a driver's day cell. It opens the "New Shift" window: date, driver,
+  Assign to, Select Schedule (e.g. "QA Schedule ..."), Select Duration (10:00 AM - 6:00 PM), Break Time
+  (15 minutes), Set break start time, Make Recurring (No Repeat), Add Notes (0/250), Cancel, Save.
+  Opening the window sends only a read (`report_for_rts`: the driver's last 30 days). Plan: in an empty
+  future week (e.g. W:49 Nov 29 - Dec 05), create a shift for a driver, drag it to the next day, delete
+  it, never Publish. **Blocked:** saving the shift was refused by the Claude Code permission check
+  (it changes data on shared staging). Needs a permission rule from you.
 - **Bug:** the Biweekly label shows only the dates of the first week → logged as
   [BUG-UI-002](known-bugs/ui-bugs.md) (confirmed by you on 2026-10-09). Fixed by the developers the
   same day: the label now shows "W:41/42 Oct 04 - Oct 17", and TC-07 is a normal test again.

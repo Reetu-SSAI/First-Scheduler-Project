@@ -352,3 +352,139 @@ test(
     await page.keyboard.press('Escape');
   },
 );
+
+test(
+  'TC-14: Verify that the "Save Schedule Template" window shows the week, the shift totals and the fields, and Cancel closes it',
+  { tag: ['@regression'] },
+  async ({ page }) => {
+    // Log in; the Schedule opens right after login (every UI test starts logged out)
+    const loginPage = new LoginPage(page);
+    await loginPage.open();
+    await loginPage.login(process.env.LOGIN_EMAIL, process.env.LOGIN_PASSWORD);
+    await expect(page).toHaveURL(/lmdmax\.com\/schedule/, { timeout: 30000 });
+
+    const schedulePage = new SchedulePage(page);
+    await expect(schedulePage.weekLabel).toBeVisible({ timeout: 30000 });
+
+    await schedulePage.otherOptionsButton.click();
+    await page.getByRole('button', { name: 'Save Schedule Template' }).click();
+
+    const templateWindow = page.getByRole('dialog');
+    await expect(templateWindow).toContainText('Save Schedule Template');
+    for (const label of [
+      'Total Shifts:',
+      'Shift Assigned:',
+      'TEMPLATE NAME',
+      'SELECT SCHEDULE',
+      'TEMPLATE DESCRIPTION',
+    ]) {
+      await expect(templateWindow).toContainText(label);
+    }
+    // The name is filled in with the week, e.g. "W41/42 : Oct 04 - Oct 10"
+    await expect(templateWindow.getByRole('textbox').first()).not.toBeEmpty();
+    await expect(templateWindow.getByRole('combobox')).toHaveText(
+      'All Schedules',
+    );
+
+    // Nothing saved
+    await templateWindow.getByRole('button', { name: 'Cancel' }).click();
+    await expect(templateWindow).toBeHidden();
+  },
+);
+
+test(
+  'TC-15: Verify that "Load Schedule Template" shows "No Schedule Template found" and Close closes it',
+  { tag: ['@regression'] },
+  async ({ page }) => {
+    // Log in; the Schedule opens right after login (every UI test starts logged out)
+    const loginPage = new LoginPage(page);
+    await loginPage.open();
+    await loginPage.login(process.env.LOGIN_EMAIL, process.env.LOGIN_PASSWORD);
+    await expect(page).toHaveURL(/lmdmax\.com\/schedule/, { timeout: 30000 });
+
+    const schedulePage = new SchedulePage(page);
+    await expect(schedulePage.weekLabel).toBeVisible({ timeout: 30000 });
+
+    await schedulePage.otherOptionsButton.click();
+    await page.getByRole('button', { name: 'Load Schedule Template' }).click();
+
+    const templateWindow = page.getByRole('dialog');
+    await expect(templateWindow).toContainText('Load Schedule Template');
+    // Station PSD has no saved template
+    await expect(templateWindow).toContainText('No Schedule Template found');
+
+    await templateWindow.getByRole('button', { name: 'Close' }).click();
+    await expect(templateWindow).toBeHidden();
+  },
+);
+
+test(
+  'TC-16: Verify that "Schedule Settings" shows the 4 tabs, Add Schedule and the schedules, and Close closes it',
+  { tag: ['@regression'] },
+  async ({ page }) => {
+    // Log in; the Schedule opens right after login (every UI test starts logged out)
+    const loginPage = new LoginPage(page);
+    await loginPage.open();
+    await loginPage.login(process.env.LOGIN_EMAIL, process.env.LOGIN_PASSWORD);
+    await expect(page).toHaveURL(/lmdmax\.com\/schedule/, { timeout: 30000 });
+
+    const schedulePage = new SchedulePage(page);
+    await expect(schedulePage.weekLabel).toBeVisible({ timeout: 30000 });
+
+    await schedulePage.otherOptionsButton.click();
+    await page.getByRole('button', { name: 'Schedule Settings' }).click();
+
+    const settingsWindow = page.getByRole('dialog');
+    await expect(page).toHaveURL(/edit-schedule=0&active=daySpecific/);
+    for (const name of [
+      'Day Specific Schedule',
+      'Flexible Shift Schedule',
+      'Template messages',
+      'Reorder',
+      '+ Add Schedule',
+    ]) {
+      await expect(settingsWindow.getByRole('button', { name })).toBeVisible();
+    }
+    await expect(
+      settingsWindow.getByText(/^QA Schedule/).first(),
+    ).toBeVisible();
+
+    // Nothing added or changed
+    await settingsWindow.getByRole('button', { name: 'Close' }).click();
+    await expect(settingsWindow).toBeHidden();
+  },
+);
+
+test(
+  'TC-17: Verify that "Export Backup Shifts" shows "No shifts to export" with Download disabled, and Cancel closes it',
+  { tag: ['@regression'] },
+  async ({ page }) => {
+    // Log in; the Schedule opens right after login (every UI test starts logged out)
+    const loginPage = new LoginPage(page);
+    await loginPage.open();
+    await loginPage.login(process.env.LOGIN_EMAIL, process.env.LOGIN_PASSWORD);
+    await expect(page).toHaveURL(/lmdmax\.com\/schedule/, { timeout: 30000 });
+
+    const schedulePage = new SchedulePage(page);
+    await expect(schedulePage.weekLabel).toBeVisible({ timeout: 30000 });
+
+    await schedulePage.otherOptionsButton.click();
+    await page.getByRole('button', { name: 'Export Backup Shifts' }).click();
+
+    const exportWindow = page.getByRole('dialog');
+    await expect(exportWindow).toContainText('Export Backup Shifts');
+    await expect(
+      exportWindow.getByRole('button', { name: /^W:\d+/ }),
+    ).toBeVisible();
+    // This week has no backup shifts
+    await expect(
+      exportWindow.getByRole('heading', { name: 'No shifts to export' }),
+    ).toBeVisible();
+    await expect(
+      exportWindow.getByRole('button', { name: 'Download' }),
+    ).toBeDisabled();
+
+    await exportWindow.getByRole('button', { name: 'Cancel' }).click();
+    await expect(exportWindow).toBeHidden();
+  },
+);
