@@ -51,21 +51,22 @@ jobs:
       - run: npx playwright install --with-deps chromium
 
       # Only one of the next four steps runs, depending on what started the workflow
+      # @knownbug tests fail on purpose, so they run only when you choose "knownbug"
       - name: Run @pr tests (pull request)
         if: github.event_name == 'pull_request'
-        run: npx playwright test --grep @pr
+        run: npx playwright test --grep @pr --grep-invert @knownbug
 
       - name: Run @smoke tests (push to main)
         if: github.event_name == 'push'
-        run: npx playwright test --grep @smoke
+        run: npx playwright test --grep @smoke --grep-invert @knownbug
 
       - name: Run @regression tests (every day)
         if: github.event_name == 'schedule'
-        run: npx playwright test --grep @regression
+        run: npx playwright test --grep @regression --grep-invert @knownbug
 
       - name: Run the chosen tests (manual run)
         if: github.event_name == 'workflow_dispatch'
-        run: npx playwright test --grep @${{ inputs.suite }}
+        run: npx playwright test --grep @${{ inputs.suite }} ${{ inputs.suite != 'knownbug' && '--grep-invert @knownbug' || '' }}
 
       - name: Build Allure report
         if: ${{ !cancelled() }}
