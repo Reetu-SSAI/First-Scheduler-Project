@@ -1,0 +1,37 @@
+{
+  "name": "scheduler-regression-suite",
+  "version": "1.0.0",
+  "description": "Playwright API and UI tests for LMDmax Scheduler",
+  "license": "ISC",
+  "type": "commonjs",
+  "scripts": {
+    "test": "playwright test --grep-invert @adds-data",
+    "test:api": "playwright test --project=api --grep-invert @adds-data",
+    "test:ui": "playwright test --project=ui --grep-invert @adds-data",
+    "test:headed": "playwright test --project=ui --headed --grep-invert @adds-data",
+    "test:smoke": "playwright test --grep @smoke",
+    "test:pr": "playwright test --grep @pr",
+    "test:regression": "playwright test --grep @regression",
+    "test:knownbug": "playwright test --grep @knownbug",
+    "report": "playwright show-report",
+    "allure": "allure open allure-results",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@faker-js/faker": "^10.6.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.4",
+    "ajv": "^8.20.0",
+    "allure": "^3.18.0",
+    "allure-playwright": "^3.12.2",
+    "eslint": "^10.11.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-playwright": "^2.12.0",
+    "globals": "^17.12.0",
+    "prettier": "^3.9.9"
+  }
+}

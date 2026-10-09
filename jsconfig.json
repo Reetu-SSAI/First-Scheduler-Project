@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "nodenext",
+    "target": "es2022",
+    "lib": ["esnext", "dom"],
+    "types": ["node"],
+    "checkJs": true,
+    "strict": false,
+    "skipLibCheck": true,
+    "maxNodeModuleJsDepth": 0
+  },
+  "include": ["**/*.js"],
+  "exclude": [
+    "node_modules",
+    "playwright-report",
+    "test-results",
+    "allure-results",
+    "allure-report",
+    "eslint.config.js"
+  ]
+}

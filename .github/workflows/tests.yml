@@ -1,0 +1,83 @@
+name: Tests
+
+# When this workflow runs
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '30 2 * * *' # every day at 08:00 IST
+  workflow_dispatch: # the "Run workflow" button in the Actions tab
+    inputs:
+      suite:
+        description: Which tests to run
+        type: choice
+        options: [smoke, pr, regression, knownbug]
+        default: regression
+
+# Settings for the tests (on your computer they come from .env.staging)
+env:
+  API_BASE_URL: https://staging-api.fleet.lmdmax.com
+  UI_BASE_URL: https://staging.scheduler.lmdmax.com
+  LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
+  LOGIN_PASSWORD: ${{ secrets.LOGIN_PASSWORD }}
+  TEST_STATION_ID: '645' # station PSD
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run format:check
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+
+      # Only one of the next four steps runs, depending on what started the workflow
+      - name: Run @pr tests (pull request)
+        if: github.event_name == 'pull_request'
+        run: npx playwright test --grep @pr
+
+      - name: Run @smoke tests (push to main)
+        if: github.event_name == 'push'
+        run: npx playwright test --grep @smoke
+
+      - name: Run @regression tests (every day)
+        if: github.event_name == 'schedule'
+        run: npx playwright test --grep @regression
+
+      - name: Run the chosen tests (manual run)
+        if: github.event_name == 'workflow_dispatch'
+        run: npx playwright test --grep @${{ inputs.suite }}
+
+      - name: Build Allure report
+        if: ${{ !cancelled() }}
+        run: npx allure awesome allure-results --single-file -o allure-report # one file: opens with a double-click
+
+      - name: Upload reports
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: reports-${{ github.run_number }}
+          overwrite: true # lets "Re-run job" replace the reports of the earlier attempt
+          path: |
+            playwright-report/
+            allure-report/
+          retention-days: 14
